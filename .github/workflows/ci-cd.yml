@@ -3,8 +3,6 @@ name: CI/CD Pipeline
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   build-and-push:
@@ -49,23 +47,22 @@ jobs:
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+    permissions:
+      contents: write
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Update Kubernetes manifests
       run: |
-        # In a real scenario, you'd use kustomize or sed to update image tags
-        sed -i "s|<ECR_REPO_URL>/backend:latest|${{ steps.login-ecr.outputs.registry }}/fintech-backend:${{ github.sha }}|g" k8s/manifests/backend.yaml
-        sed -i "s|<ECR_REPO_URL>/frontend:latest|${{ steps.login-ecr.outputs.registry }}/fintech-frontend:${{ github.sha }}|g" k8s/manifests/frontend.yaml
+        # This updates the image tags to the latest version
+        sed -i "s|396913730682.dkr.ecr.us-east-1.amazonaws.com/fintech-backend:.*|396913730682.dkr.ecr.us-east-1.amazonaws.com/fintech-backend:${{ github.sha }}|g" k8s/manifests/backend.yaml
+        sed -i "s|396913730682.dkr.ecr.us-east-1.amazonaws.com/fintech-frontend:.*|396913730682.dkr.ecr.us-east-1.amazonaws.com/fintech-frontend:${{ github.sha }}|g" k8s/manifests/frontend.yaml
         
     - name: Commit and push changes
       run: |
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
         git add k8s/manifests/*.yaml
-        git commit -m "chore: update image tags to ${{ github.sha }}"
-        git push
+        # Only commit and push if there are actually changes to avoid error
+        git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update image tags" && git push)
