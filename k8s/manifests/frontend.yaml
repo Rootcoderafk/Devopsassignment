@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: 396913730682.dkr.ecr.us-east-1.amazonaws.com/frontend:latest
+        image: 396913730682.dkr.ecr.us-east-1.amazonaws.com/fintech-frontend:latest
         ports:
         - containerPort: 80
         resources:
@@ -36,4 +36,4 @@ spec:
   ports:
   - port: 80
     targetPort: 80
-  type: ClusterIP
+  type: LoadBalancer
