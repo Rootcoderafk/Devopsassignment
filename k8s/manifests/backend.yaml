@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: 396913730682.dkr.ecr.us-east-1.amazonaws.com/fintech-backend:2af491169b124626eb0f2af34ae2d10ef408475a
+        image: 396913730682.dkr.ecr.us-east-1.amazonaws.com/fintech-backend:4e0fb26233d371756b064e7cfc66e6c65e8cc5bd
         ports:
         - containerPort: 3000
         env:
