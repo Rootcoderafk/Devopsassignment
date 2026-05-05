@@ -40,10 +40,10 @@ If our primary region fails, Route 53 health checks will detect the downtime and
 
 ### 1. Infrastructure
   
-[0m[1mTerraform initialized in an empty directory![0m
+Terraform initialized in an empty directory!
 
 The directory has no Terraform configuration files. You may begin working
-with Terraform immediately by creating Terraform configuration files.[0m  
+with Terraform immediately by creating Terraform configuration files.
   
 
 ### 2. Create Image Repositories
